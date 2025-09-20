@@ -6,15 +6,17 @@ A web application that helps you discover movies based on your preferred genre u
 
 1. Clone this repository
 2. Get your TMDB API key from [The Movie Database](https://www.themoviedb.org/settings/api)
-3. Create a `.env` file in the root directory and add your API key:
+3. Copy `config.example.js` to `config.js` and add your API key:
+   ```bash
+   cp config.example.js config.js
    ```
-   TMDB_API_KEY=your_api_key_here
-   ```
-4. Open `index.html` in your web browser
+4. Edit `config.js` and replace `your_api_key_here` with your actual API key
+5. Open `index.html` in your web browser
 
-## Environment Variables
+## Configuration
 
-- `TMDB_API_KEY`: Your TMDB API key (required)
+- `config.js`: Contains your API key (not tracked in git)
+- `config.example.js`: Template file showing required configuration
 
 ## Files
 
