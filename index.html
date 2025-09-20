@@ -2,31 +2,57 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Film Finder</title>
+    <title>Movie Discovery Hub</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400&family=Fredoka+One&family=Questrial&family=Staatliches&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css?v=2">
     <script defer src="https://kit.fontawesome.com/e918d10e90.js" crossorigin="anonymous"></script>
     <script defer src="./script.js"></script>
   </head>
   <body>
     <header>
-      <h1 id="appTitle">🍿Film Finder🍿</h1>
+      <h1 id="appTitle">🎬 Movie Discovery Hub</h1>
+      <div class="stats">
+        <span id="movieCount">Movies Discovered: 0</span>
+        <span id="favoriteCount">Favorites: 0</span>
+      </div>
     </header>
-    <form id="genreForm">
-      <label>Choose a genre:</label>
-      <select name="genres" id="genres">
-      </select>
-    </form>
-    <button id="playBtn">Let's Play!</button>
-    <div id="movieInfo">
-      <div id="moviePoster"></div>
-      <div id="movieText"></div>
+    
+    <div class="controls">
+      <div class="search-section">
+        <input type="text" id="searchInput" placeholder="Search for movies...">
+        <button id="searchBtn">🔍</button>
+      </div>
+      
+      <div class="filter-section">
+        <label>Choose a genre:</label>
+        <select name="genres" id="genres">
+          <option value="">All Genres</option>
+        </select>
+        <button id="playBtn">🎲 Random Movie</button>
+      </div>
     </div>
-    <div id="likeOrDislikeBtns" hidden>
-      <button id="likeBtn"><i class="fa-solid fa-thumbs-up"></i></button>
-      <button id="dislikeBtn"><i class="fa-solid fa-thumbs-down"></i></button>
+
+    <div id="loadingIndicator" class="loading hidden">
+      <div class="spinner"></div>
+      <p>Finding your perfect movie...</p>
+    </div>
+
+    <div id="movieInfo" class="movie-container">
+      <div id="moviePoster" class="poster-section"></div>
+      <div id="movieText" class="movie-details"></div>
+    </div>
+
+    <div id="likeOrDislikeBtns" class="action-buttons hidden">
+      <button id="likeBtn" class="btn-like">❤️ Add to Favorites</button>
+      <button id="dislikeBtn" class="btn-dislike">👎 Not for me</button>
+      <button id="nextBtn" class="btn-next">➡️ Next Movie</button>
+    </div>
+
+    <div id="favoritesList" class="favorites-section hidden">
+      <h3>Your Favorites</h3>
+      <div id="favoritesContainer"></div>
     </div>
   </body>
 </html>
