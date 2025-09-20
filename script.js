@@ -6,15 +6,20 @@ const getGenres = async () => {
   const genreRequestEndpoint = '/genre/movie/list';
   const requestParams = `?api_key=${tmdbKey}`;
   const urlToFetch = tmdbBaseUrl + genreRequestEndpoint + requestParams;
+  console.log('Fetching genres from:', urlToFetch);
   try {
     const response = await fetch(urlToFetch);
+    console.log('Response status:', response.status);
     if (response.ok) {
       const jsonResponse = await response.json();
+      console.log('Genres received:', jsonResponse.genres);
       const genres = jsonResponse.genres;
       return genres;
+    } else {
+      console.error('Failed to fetch genres:', response.status, response.statusText);
     }
   } catch (error) {
-    console.log(error);
+    console.error('Error fetching genres:', error);
   }
 };
 const getMovies = async () => {
@@ -59,5 +64,20 @@ const showRandomMovie = async () => {
   displayMovie(info);
 };
 
-getGenres().then(populateGenreDropdown);
-playBtn.onclick = showRandomMovie;
+// Wait for DOM to be ready
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('DOM loaded, initializing app...');
+  
+  // Load genres and populate dropdown
+  getGenres().then(genres => {
+    if (genres) {
+      console.log('Populating dropdown with genres:', genres);
+      populateGenreDropdown(genres);
+    } else {
+      console.error('No genres received');
+    }
+  });
+  
+  // Set up play button
+  playBtn.onclick = showRandomMovie;
+});
