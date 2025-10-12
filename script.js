@@ -274,6 +274,25 @@ function addToFavorites() {
     }, 2000);
 }
 
+// Remove movie from favorites
+function removeFromFavorites(movieId) {
+    favorites = favorites.filter(fav => fav.id !== movieId);
+    localStorage.setItem('movieFavorites', JSON.stringify(favorites));
+    updateStats();
+    loadFavorites();
+    
+    // Show confirmation
+    const removeBtn = event.target;
+    const originalText = removeBtn.textContent;
+    removeBtn.textContent = '✅ Removed!';
+    removeBtn.style.background = 'linear-gradient(45deg, #e74c3c, #c0392b)';
+    
+    setTimeout(() => {
+        removeBtn.textContent = originalText;
+        removeBtn.style.background = 'linear-gradient(45deg, #e74c3c, #c0392b)';
+    }, 2000);
+}
+
 // Show next movie
 function nextMovie() {
     showRandomMovie();
@@ -308,11 +327,17 @@ function loadFavorites() {
             ${posterHtml}
             <h4>${movie.title}</h4>
             <div class="rating">⭐ ${movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A'}</div>
+            <button class="remove-favorite-btn" onclick="removeFromFavorites(${movie.id})" title="Remove from favorites">
+                ❌ Remove
+            </button>
         `;
         
-        favoriteItem.addEventListener('click', () => {
-            displayMovie(movie);
-            document.getElementById('movieInfo').scrollIntoView({ behavior: 'smooth' });
+        // Add click event for displaying movie (but not on the remove button)
+        favoriteItem.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('remove-favorite-btn')) {
+                displayMovie(movie);
+                document.getElementById('movieInfo').scrollIntoView({ behavior: 'smooth' });
+            }
         });
         
         favoritesContainer.appendChild(favoriteItem);

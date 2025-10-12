@@ -443,3 +443,43 @@ label {
     font-size: 1.8rem;
   }
 }
+
+/* Remove Favorite Button Styles */
+.remove-favorite-btn {
+  background: linear-gradient(45deg, #e74c3c, #c0392b);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+  width: 100%;
+  box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+}
+
+.remove-favorite-btn:hover {
+  background: linear-gradient(45deg, #c0392b, #a93226);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+}
+
+.remove-favorite-btn:active {
+  transform: translateY(0);
+}
+
+/* Update favorite item layout to accommodate remove button */
+.favorite-item {
+  position: relative;
+  padding-bottom: 50px; /* Space for remove button */
+}
+
+.favorite-item h4 {
+  margin-bottom: 8px;
+}
+
+.favorite-item .rating {
+  margin-bottom: 10px;
+}
