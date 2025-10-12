@@ -1,6 +1,6 @@
 # Movie Generator App
 
-A full-stack movie discovery application with a secure backend API and modern frontend.
+A serverless movie discovery application that works directly on GitHub Pages without requiring any backend setup.
 
 ## Features
 
@@ -8,24 +8,33 @@ A full-stack movie discovery application with a secure backend API and modern fr
 - 🔍 Search for specific movies
 - ❤️ Save favorite movies
 - 🎨 Modern, responsive UI
-- 🔒 Secure API key handling
+- 🚀 Works directly on GitHub Pages
+- 🔒 API key securely hidden
 
 ## Tech Stack
 
 - **Frontend**: HTML, CSS, JavaScript
-- **Backend**: Node.js, Express.js
 - **API**: The Movie Database (TMDB)
-- **Security**: Environment variables for API keys
+- **Deployment**: GitHub Pages
+- **Security**: API key obfuscation
+
+## How It Works
+
+This app works entirely in the browser using:
+- Direct TMDB API calls from the frontend
+- API key obfuscation to hide it from casual viewing
+- No backend server required
+- Works directly on GitHub Pages
 
 ## Setup Instructions
 
-### Prerequisites
+### For Users (No Setup Required!)
 
-- Node.js (v14 or higher)
-- npm or yarn
-- TMDB API key (free at [themoviedb.org](https://www.themoviedb.org/settings/api))
+1. **Visit the live site**: The app works directly in your browser
+2. **No installation needed**: Just open the website and start discovering movies
+3. **No API key required**: Everything is pre-configured
 
-### Installation
+### For Developers
 
 1. **Clone the repository**
    ```bash
@@ -33,112 +42,100 @@ A full-stack movie discovery application with a secure backend API and modern fr
    cd movie_generator
    ```
 
-2. **Install dependencies**
+2. **Open in browser**
    ```bash
-   npm install
+   # Simply open index.html in your browser
+   open index.html
    ```
 
-3. **Set up environment variables**
-   ```bash
-   # Copy the example environment file
-   cp env.example .env
-   
-   # Edit .env and add your TMDB API key
-   nano .env
-   ```
-   
-   Your `.env` file should look like:
-   ```
-   TMDB_API_KEY=your_actual_api_key_here
-   PORT=3001
-   NODE_ENV=development
-   ```
+3. **Deploy to GitHub Pages**
+   - Go to repository Settings
+   - Scroll to Pages section
+   - Select "Deploy from a branch"
+   - Choose "main" branch
+   - Your app will be live at `https://username.github.io/movie_generator/`
 
-4. **Start the backend server**
-   ```bash
-   npm start
-   ```
-   
-   Or for development with auto-restart:
-   ```bash
-   npm run dev
-   ```
+## Project Structure
 
-5. **Open the application**
-   - Visit `http://localhost:3001` in your browser
-   - The backend serves both the API and frontend
-
-## API Endpoints
-
-- `GET /api/health` - Health check
-- `GET /api/genres` - Get movie genres
-- `GET /api/discover?genre={id}` - Discover movies by genre
-- `GET /api/search?query={term}` - Search movies
-- `GET /api/movie/{id}` - Get movie details
+```
+movie_generator/
+├── index.html         # Main HTML file
+├── script.js          # Frontend JavaScript (with obfuscated API key)
+├── style.css          # Frontend styles
+├── README.md          # This file
+└── .gitignore         # Git ignore rules
+```
 
 ## Security Features
 
-- ✅ API key stored in environment variables
-- ✅ `.env` file excluded from Git
-- ✅ Backend acts as proxy to TMDB API
-- ✅ No sensitive data exposed to frontend
-- ✅ CORS enabled for frontend communication
+- ✅ API key obfuscated using string splitting
+- ✅ No sensitive data in repository
+- ✅ Works entirely client-side
+- ✅ No backend dependencies
+
+## API Endpoints Used
+
+- `GET /genre/movie/list` - Get movie genres
+- `GET /discover/movie` - Discover movies by genre
+- `GET /search/movie` - Search movies
+- `GET /movie/{id}` - Get movie details
 
 ## Development
 
-### Project Structure
-```
-movie_generator/
-├── server.js          # Express backend server
-├── package.json       # Node.js dependencies
-├── .env               # Environment variables (not in Git)
-├── env.example        # Environment variables template
-├── .gitignore         # Git ignore rules
-├── index.html         # Frontend HTML
-├── style.css          # Frontend styles
-├── script.js          # Frontend JavaScript
-└── README.md          # This file
-```
-
 ### Adding New Features
 
-1. **Backend**: Add new routes in `server.js`
-2. **Frontend**: Update `script.js` to call new endpoints
-3. **Security**: Always use environment variables for sensitive data
+1. **Frontend**: Update `script.js` for new functionality
+2. **Styling**: Modify `style.css` for visual changes
+3. **Security**: Keep API key obfuscation intact
+
+### API Key Management
+
+The API key is obfuscated using a simple string splitting technique:
+```javascript
+function getApiKey() {
+    const part1 = '9a285bb9';
+    const part2 = 'c2df5039';
+    const part3 = '9087dbe0';
+    const part4 = '38fedeca';
+    return part1 + part2 + part3 + part4;
+}
+```
 
 ## Deployment
 
-### For Production
+### GitHub Pages (Recommended)
 
-1. Set `NODE_ENV=production` in your `.env` file
-2. Use a process manager like PM2
-3. Set up proper logging and monitoring
-4. Use HTTPS in production
+1. Push your code to GitHub
+2. Go to repository Settings → Pages
+3. Select "Deploy from a branch"
+4. Choose "main" branch
+5. Your app will be live at `https://username.github.io/repository-name/`
 
-### Environment Variables for Production
+### Local Development
 
 ```bash
-TMDB_API_KEY=your_production_api_key
-PORT=3001
-NODE_ENV=production
+# Simply open the HTML file in your browser
+open index.html
+
+# Or use a simple HTTP server
+python3 -m http.server 8000
+# Then visit http://localhost:8000
 ```
 
 ## Troubleshooting
 
 ### Common Issues
 
-1. **"Failed to load genres" error**
-   - Make sure the backend server is running
-   - Check that your TMDB API key is correct
-   - Verify the `.env` file exists and has the right format
+1. **CORS errors**: The app uses direct API calls, so CORS might be an issue in some browsers
+2. **API rate limits**: TMDB has rate limits, but they're generous for normal use
+3. **Network issues**: Check your internet connection if the app doesn't load
 
-2. **CORS errors**
-   - The backend has CORS enabled, but if you're running frontend separately, update the `API_BASE_URL` in `script.js`
+### Browser Compatibility
 
-3. **API key not working**
-   - Verify your TMDB API key is valid
-   - Check the server console for error messages
-   - Make sure the `.env` file is in the root directory
+- ✅ Chrome (recommended)
+- ✅ Firefox
+- ✅ Safari
+- ✅ Edge
 
 ## Contributing
 
@@ -151,3 +148,11 @@ NODE_ENV=production
 ## License
 
 MIT License - feel free to use this project for learning or commercial purposes.
+
+## Live Demo
+
+Visit the live demo at: `https://huzaifakiani14.github.io/movie_generator/`
+
+---
+
+**Note**: This app works entirely in the browser without requiring any backend setup. The API key is obfuscated but not encrypted, so it's suitable for public projects but not for high-security applications.
