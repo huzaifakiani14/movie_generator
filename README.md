@@ -16,20 +16,15 @@ A secure, full-featured movie discovery application that uses environment variab
 - 🎬 **Discover random movies** by genre
 - 🔍 **Search for specific movies** with instant results
 - ❤️ **Save favorite movies** to your personal collection
-- ❌ **Remove favorites** with one-click functionality
 - 🎨 **Modern, responsive UI** with smooth animations
-- 🔒 **Secure API key handling** via backend proxy
 - 📊 **Real-time statistics** tracking
-- 🌐 **24/7 availability** via Render deployment
-- 🎭 **Movie emoji favicon** in browser tabs
-
 ## 🛠️ Tech Stack
 
 - **Frontend**: HTML, CSS, JavaScript
 - **Backend**: Node.js, Express
 - **API**: The Movie Database (TMDB)
 - **Security**: Environment variables, dotenv
-- **Deployment**: Render (free tier)
+- **Deployment**: Render
 - **Dependencies**: axios, cors, express
 
 ## 🌐 Live Demo
