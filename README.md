@@ -1,7 +1,6 @@
-# 🎬 Movie Discovery Hub - Secure Version
+# 🎬 Movie Discovery Hub
 
-A secure, full-featured movie discovery application that uses environment variables to protect API keys and follows security best practices. Deployed on **Render** for 24/7 availability.
-
+A movie recommender app that recommends you movies based on genres and let's you add/save to your favorites!
 ## 🔒 Security Features
 
 - ✅ **API key stored in environment variables** (never committed to Git)
