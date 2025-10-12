@@ -1,18 +1,8 @@
-// Movie Discovery Hub - Serverless Version
-// This version works directly on GitHub Pages without requiring a backend
+// Movie Discovery Hub - Secure Version
+// This version uses a secure backend with environment variables
 
-// Configuration - API key is hidden using a simple encoding technique
-const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
-
-// Simple API key obfuscation (not secure but hides from casual viewing)
-function getApiKey() {
-    // The API key is split and encoded to avoid direct exposure
-    const part1 = '9a285bb9';
-    const part2 = 'c2df5039';
-    const part3 = '9087dbe0';
-    const part4 = '38fedeca';
-    return part1 + part2 + part3 + part4;
-}
+// Backend API configuration
+const API_BASE_URL = 'http://localhost:3001/api';
 
 // App state
 let movieCount = 0;
@@ -34,10 +24,7 @@ window.addEventListener('load', function() {
 async function loadGenres() {
     try {
         console.log('Loading genres...');
-        const apiKey = getApiKey();
-        const url = `${TMDB_BASE_URL}/genre/movie/list?api_key=${apiKey}`;
-        
-        const response = await fetch(url);
+        const response = await fetch(`${API_BASE_URL}/genres`);
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -58,7 +45,7 @@ async function loadGenres() {
         }
     } catch (error) {
         console.error('Error loading genres:', error);
-        alert('Failed to load genres. Please check your internet connection.');
+        alert('Failed to load genres. Please make sure the backend server is running.');
     }
 }
 
@@ -115,10 +102,9 @@ async function showRandomMovie() {
     showLoading();
     
     try {
-        const apiKey = getApiKey();
-        let url = `${TMDB_BASE_URL}/discover/movie?api_key=${apiKey}&sort_by=popularity.desc`;
+        let url = `${API_BASE_URL}/discover`;
         if (selectedGenre) {
-            url += `&with_genres=${selectedGenre}`;
+            url += `?genre=${selectedGenre}`;
         }
         
         console.log('Loading movies from:', url);
@@ -135,7 +121,7 @@ async function showRandomMovie() {
         }
     } catch (error) {
         console.error('Error loading movies:', error);
-        alert('Error loading movies. Please check your internet connection.');
+        alert('Error loading movies. Please make sure the backend server is running.');
     } finally {
         hideLoading();
     }
@@ -152,8 +138,7 @@ async function searchMovies() {
     showLoading();
     
     try {
-        const apiKey = getApiKey();
-        const url = `${TMDB_BASE_URL}/search/movie?api_key=${apiKey}&query=${encodeURIComponent(searchTerm)}`;
+        const url = `${API_BASE_URL}/search?query=${encodeURIComponent(searchTerm)}`;
         console.log('Searching for:', searchTerm);
         
         const response = await fetch(url);
@@ -169,7 +154,7 @@ async function searchMovies() {
         }
     } catch (error) {
         console.error('Error searching movies:', error);
-        alert('Error searching movies. Please check your internet connection.');
+        alert('Error searching movies. Please make sure the backend server is running.');
     } finally {
         hideLoading();
     }
@@ -182,8 +167,7 @@ async function displayMovie(movie) {
     
     // Get additional movie details
     try {
-        const apiKey = getApiKey();
-        const detailsResponse = await fetch(`${TMDB_BASE_URL}/movie/${movie.id}?api_key=${apiKey}`);
+        const detailsResponse = await fetch(`${API_BASE_URL}/movie/${movie.id}`);
         const details = await detailsResponse.json();
         movie = { ...movie, ...details }; // Merge additional details
     } catch (error) {
