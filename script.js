@@ -1,7 +1,7 @@
 // Movie Discovery Hub - Production Version
 // This version uses a deployed backend for 24/7 availability
 
-// Backend API configuration - Update this URL after deployment
+// Backend API configuration - Using deployed Render backend
 const API_BASE_URL = 'https://movie-generator-backend.onrender.com/api';
 // Fallback to localhost for development
 // const API_BASE_URL = 'http://localhost:3001/api';
