@@ -12,6 +12,9 @@ const PORT = process.env.PORT || 3001;
 const TMDB_API_KEY = process.env.TMDB_API_KEY;
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
+// Trust proxy for production deployment
+app.set('trust proxy', 1);
+
 // Middleware
 app.use(cors());
 app.use(express.json());
