@@ -1,6 +1,3 @@
-// Secure Movie Generator Backend
-// Uses environment variables to keep API key safe
-
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
