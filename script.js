@@ -1,11 +1,5 @@
-// Movie Discovery Hub - Production Version
-// This version uses a deployed backend for 24/7 availability
-
-// Backend API configuration - Using deployed Render backend
+//render backend
 const API_BASE_URL = 'https://movie-generator-backend.onrender.com/api';
-// Fallback to localhost for development
-// const API_BASE_URL = 'http://localhost:3001/api';
-
 // App state
 let movieCount = 0;
 let favorites = JSON.parse(localStorage.getItem('movieFavorites') || '[]');
@@ -55,7 +49,7 @@ async function loadGenres() {
     }
 }
 
-// Setup all event listeners
+// Setting up all eventListeners on together
 function setupEventListeners() {
     const playBtn = document.getElementById('playBtn');
     const searchBtn = document.getElementById('searchBtn');
@@ -363,7 +357,6 @@ function updateStats() {
         favoriteCountEl.textContent = `Favorites: ${favorites.length}`;
     }
 }
-
 // ===== ADVANCED FEATURES =====
 
 // Theme Management
