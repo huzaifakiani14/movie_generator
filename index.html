@@ -12,6 +12,11 @@
     <script defer src="./script.js"></script>
   </head>
   <body>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle" title="Toggle Dark/Light Theme">
+      🌙
+    </button>
+
     <header>
       <h1 id="appTitle">🎬 Movie Discovery Hub</h1>
       <div class="stats">
@@ -22,16 +27,56 @@
     
     <div class="controls">
       <div class="search-section">
-        <input type="text" id="searchInput" placeholder="Search for movies...">
-        <button id="searchBtn">🔍</button>
+        <div class="search-input-container">
+          <input type="text" id="searchInput" placeholder="Search for movies...">
+          <button id="searchBtn" class="search-btn">
+            <span class="btn-text">🔍 Search</span>
+            <span class="btn-loading hidden">⏳ Searching...</span>
+          </button>
+        </div>
+        <div class="search-suggestions hidden" id="searchSuggestions"></div>
       </div>
       
       <div class="filter-section">
-        <label>Choose a genre:</label>
-        <select name="genres" id="genres">
-          <option value="">All Genres</option>
-        </select>
-        <button id="playBtn">🎲 Random Movie</button>
+        <div class="filter-group">
+          <label for="genres">🎭 Choose a genre:</label>
+          <select name="genres" id="genres">
+            <option value="">All Genres</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label for="sortBy">📊 Sort by:</label>
+          <select name="sortBy" id="sortBy">
+            <option value="popularity.desc">Most Popular</option>
+            <option value="vote_average.desc">Highest Rated</option>
+            <option value="release_date.desc">Newest First</option>
+            <option value="release_date.asc">Oldest First</option>
+            <option value="title.asc">A-Z</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label for="yearRange">📅 Year:</label>
+          <select name="yearRange" id="yearRange">
+            <option value="">Any Year</option>
+            <option value="2024">2024</option>
+            <option value="2023">2023</option>
+            <option value="2022">2022</option>
+            <option value="2021">2021</option>
+            <option value="2020">2020</option>
+            <option value="2019">2019</option>
+            <option value="2018">2018</option>
+            <option value="2017">2017</option>
+            <option value="2016">2016</option>
+            <option value="2015">2015</option>
+          </select>
+        </div>
+        
+        <button id="playBtn" class="random-btn">
+          <span class="btn-text">🎲 Random Movie</span>
+          <span class="btn-loading hidden">🎬 Finding...</span>
+        </button>
       </div>
     </div>
 
@@ -41,14 +86,39 @@
     </div>
 
     <div id="movieInfo" class="movie-container">
-      <div id="moviePoster" class="poster-section"></div>
-      <div id="movieText" class="movie-details"></div>
+      <div id="moviePoster" class="poster-section">
+        <div class="poster-placeholder">
+          <div class="poster-icon">🎬</div>
+          <p>Movie poster will appear here</p>
+        </div>
+      </div>
+      <div id="movieText" class="movie-details">
+        <div class="movie-placeholder">
+          <h2>Welcome to Movie Discovery Hub!</h2>
+          <p>Click "Random Movie" or search for movies to get started. Discover amazing films, save your favorites, and explore different genres!</p>
+          <div class="welcome-features">
+            <div class="feature-item">🎲 Random Discovery</div>
+            <div class="feature-item">🔍 Smart Search</div>
+            <div class="feature-item">❤️ Save Favorites</div>
+            <div class="feature-item">🎭 Genre Filters</div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div id="likeOrDislikeBtns" class="action-buttons hidden">
-      <button id="likeBtn" class="btn-like">❤️ Add to Favorites</button>
-      <button id="dislikeBtn" class="btn-dislike">👎 Not for me</button>
-      <button id="nextBtn" class="btn-next">➡️ Next Movie</button>
+      <button id="likeBtn" class="btn-like">
+        <span class="btn-text">❤️ Add to Favorites</span>
+        <span class="btn-loading hidden">💾 Saving...</span>
+      </button>
+      <button id="dislikeBtn" class="btn-dislike">
+        <span class="btn-text">👎 Not for me</span>
+        <span class="btn-loading hidden">⏭️ Skipping...</span>
+      </button>
+      <button id="nextBtn" class="btn-next">
+        <span class="btn-text">➡️ Next Movie</span>
+        <span class="btn-loading hidden">🎬 Loading...</span>
+      </button>
     </div>
 
     <div id="favoritesList" class="favorites-section hidden">

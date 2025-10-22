@@ -10,16 +10,20 @@ const API_BASE_URL = 'https://movie-generator-backend.onrender.com/api';
 let movieCount = 0;
 let favorites = JSON.parse(localStorage.getItem('movieFavorites') || '[]');
 let currentMovie = null;
+let searchTimeout = null;
+let currentTheme = localStorage.getItem('theme') || 'light';
 
 console.log('Movie Discovery Hub loaded');
 
 // Wait for page to load
 window.addEventListener('load', function() {
     console.log('Page loaded, initializing app...');
+    initializeTheme();
     loadGenres();
     setupEventListeners();
     updateStats();
     loadFavorites();
+    setupAdvancedFeatures();
 });
 
 // Load genres and populate dropdown
@@ -59,6 +63,7 @@ function setupEventListeners() {
     const likeBtn = document.getElementById('likeBtn');
     const dislikeBtn = document.getElementById('dislikeBtn');
     const nextBtn = document.getElementById('nextBtn');
+    const themeToggle = document.getElementById('themeToggle');
     
     if (playBtn) playBtn.addEventListener('click', showRandomMovie);
     if (searchBtn) searchBtn.addEventListener('click', searchMovies);
@@ -70,6 +75,7 @@ function setupEventListeners() {
     if (likeBtn) likeBtn.addEventListener('click', addToFavorites);
     if (dislikeBtn) dislikeBtn.addEventListener('click', nextMovie);
     if (nextBtn) nextBtn.addEventListener('click', nextMovie);
+    if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
     
     console.log('Event listeners setup complete');
 }
@@ -357,3 +363,246 @@ function updateStats() {
         favoriteCountEl.textContent = `Favorites: ${favorites.length}`;
     }
 }
+
+// ===== ADVANCED FEATURES =====
+
+// Theme Management
+function initializeTheme() {
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    updateThemeToggle();
+}
+
+function toggleTheme() {
+    currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    localStorage.setItem('theme', currentTheme);
+    updateThemeToggle();
+}
+
+function updateThemeToggle() {
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+        themeToggle.textContent = currentTheme === 'light' ? '🌙' : '☀️';
+    }
+}
+
+// Advanced Search with Suggestions
+function setupAdvancedFeatures() {
+    const searchInput = document.getElementById('searchInput');
+    const searchSuggestions = document.getElementById('searchSuggestions');
+    
+    if (searchInput) {
+        searchInput.addEventListener('input', handleSearchInput);
+        searchInput.addEventListener('focus', showSearchSuggestions);
+        searchInput.addEventListener('blur', hideSearchSuggestions);
+    }
+    
+    // Setup button loading states
+    setupButtonLoadingStates();
+}
+
+function handleSearchInput(event) {
+    const query = event.target.value.trim();
+    
+    if (searchTimeout) {
+        clearTimeout(searchTimeout);
+    }
+    
+    if (query.length < 2) {
+        hideSearchSuggestions();
+        return;
+    }
+    
+    searchTimeout = setTimeout(() => {
+        fetchSearchSuggestions(query);
+    }, 300);
+}
+
+async function fetchSearchSuggestions(query) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/search?query=${encodeURIComponent(query)}`);
+        const data = await response.json();
+        
+        if (data.results && data.results.length > 0) {
+            showSearchSuggestions(data.results.slice(0, 5));
+        } else {
+            hideSearchSuggestions();
+        }
+    } catch (error) {
+        console.error('Error fetching search suggestions:', error);
+        hideSearchSuggestions();
+    }
+}
+
+function showSearchSuggestions(movies) {
+    const searchSuggestions = document.getElementById('searchSuggestions');
+    if (!searchSuggestions) return;
+    
+    searchSuggestions.innerHTML = '';
+    searchSuggestions.classList.remove('hidden');
+    
+    movies.forEach(movie => {
+        const suggestionItem = document.createElement('div');
+        suggestionItem.className = 'suggestion-item';
+        suggestionItem.innerHTML = `
+            <div style="font-weight: 600;">${movie.title}</div>
+            <div style="font-size: 0.9rem; color: var(--text-secondary);">
+                ${movie.release_date ? new Date(movie.release_date).getFullYear() : 'N/A'} • 
+                ⭐ ${movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A'}
+            </div>
+        `;
+        
+        suggestionItem.addEventListener('click', () => {
+            document.getElementById('searchInput').value = movie.title;
+            hideSearchSuggestions();
+            searchMovies();
+        });
+        
+        searchSuggestions.appendChild(suggestionItem);
+    });
+}
+
+function hideSearchSuggestions() {
+    const searchSuggestions = document.getElementById('searchSuggestions');
+    if (searchSuggestions) {
+        searchSuggestions.classList.add('hidden');
+    }
+}
+
+// Button Loading States
+function setupButtonLoadingStates() {
+    const buttons = [
+        { id: 'searchBtn', loadingText: '⏳ Searching...' },
+        { id: 'playBtn', loadingText: '🎬 Finding...' },
+        { id: 'likeBtn', loadingText: '💾 Saving...' },
+        { id: 'dislikeBtn', loadingText: '⏭️ Skipping...' },
+        { id: 'nextBtn', loadingText: '🎬 Loading...' }
+    ];
+    
+    buttons.forEach(button => {
+        const element = document.getElementById(button.id);
+        if (element) {
+            element.addEventListener('click', () => {
+                setButtonLoading(element, true);
+                setTimeout(() => setButtonLoading(element, false), 2000);
+            });
+        }
+    });
+}
+
+function setButtonLoading(button, isLoading) {
+    const btnText = button.querySelector('.btn-text');
+    const btnLoading = button.querySelector('.btn-loading');
+    
+    if (btnText && btnLoading) {
+        if (isLoading) {
+            btnText.classList.add('hidden');
+            btnLoading.classList.remove('hidden');
+            button.disabled = true;
+        } else {
+            btnText.classList.remove('hidden');
+            btnLoading.classList.add('hidden');
+            button.disabled = false;
+        }
+    }
+}
+
+// Enhanced Movie Display with Animations
+function displayMovieWithAnimation(movie) {
+    const movieContainer = document.getElementById('movieInfo');
+    const posterSection = document.getElementById('moviePoster');
+    const movieText = document.getElementById('movieText');
+    
+    // Add fade out animation
+    movieContainer.style.opacity = '0';
+    movieContainer.style.transform = 'translateY(20px)';
+    
+    setTimeout(() => {
+        displayMovie(movie);
+        
+        // Add fade in animation
+        movieContainer.style.transition = 'all 0.6s ease';
+        movieContainer.style.opacity = '1';
+        movieContainer.style.transform = 'translateY(0)';
+    }, 300);
+}
+
+// Add smooth scrolling to movie details
+function scrollToMovie() {
+    const movieInfo = document.getElementById('movieInfo');
+    if (movieInfo) {
+        movieInfo.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+        });
+    }
+}
+
+// Add keyboard shortcuts
+document.addEventListener('keydown', function(event) {
+    // Space bar for random movie
+    if (event.code === 'Space' && !event.target.matches('input, textarea')) {
+        event.preventDefault();
+        showRandomMovie();
+    }
+    
+    // Enter for search
+    if (event.code === 'Enter' && event.target.id === 'searchInput') {
+        event.preventDefault();
+        searchMovies();
+    }
+    
+    // Escape to clear search
+    if (event.code === 'Escape' && event.target.id === 'searchInput') {
+        event.target.value = '';
+        hideSearchSuggestions();
+    }
+});
+
+// Add click outside to close suggestions
+document.addEventListener('click', function(event) {
+    if (!event.target.closest('.search-section')) {
+        hideSearchSuggestions();
+    }
+});
+
+// Enhanced error handling with user-friendly messages
+function showError(message, type = 'error') {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = `error-message ${type}`;
+    errorDiv.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${type === 'error' ? 'var(--danger-gradient)' : 'var(--success-gradient)'};
+        color: white;
+        padding: 15px 20px;
+        border-radius: 10px;
+        box-shadow: var(--shadow-medium);
+        z-index: 1000;
+        animation: slideInRight 0.3s ease;
+    `;
+    errorDiv.textContent = message;
+    
+    document.body.appendChild(errorDiv);
+    
+    setTimeout(() => {
+        errorDiv.style.animation = 'slideOutRight 0.3s ease';
+        setTimeout(() => errorDiv.remove(), 300);
+    }, 3000);
+}
+
+// Add CSS for animations
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideInRight {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    
+    @keyframes slideOutRight {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+    }
+`;
+document.head.appendChild(style);
