@@ -1,5 +1,8 @@
 # 🎬 Movie Discovery Hub
 
+[//]: # (YOLO badge minor change for PR)
+[//]: # (This line is a harmless README comment.)
+
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/huzaifakiani14/movie_generator/pulls) [![Open PRs](https://img.shields.io/github/issues-pr/huzaifakiani14/movie_generator.svg)](https://github.com/huzaifakiani14/movie_generator/pulls) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](#-license)
 
 A movie recommender app that recommends you movies based on genres and let's you add/save to your favorites!
