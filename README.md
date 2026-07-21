@@ -6,15 +6,6 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/huzaifakiani14/movie_generator/pulls) [![Open PRs](https://img.shields.io/github/issues-pr/huzaifakiani14/movie_generator.svg)](https://github.com/huzaifakiani14/movie_generator/pulls) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](#-license)
 
 A movie recommender app that recommends you movies based on genres and let's you add/save to your favorites!
-## 🔒 Security Features
-
-- ✅ **API key stored in environment variables** (never committed to Git)
-- ✅ **Backend server** handles all API calls securely
-- ✅ **CORS protection** for cross-origin requests
-- ✅ **Error handling** with proper status codes
-- ✅ **Health check endpoint** for monitoring
-- ✅ **Deployed on Render** for secure cloud hosting
-
 ## 🚀 Features
 
 - 🎬 **Discover random movies** by genre
